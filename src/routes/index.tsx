@@ -1,23 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { LienLoopApp } from "@/lienloop/LienLoopApp";
+import lienloopCss from "@/lienloop/lienloop.css?url";
+import cloudCss from "@/lienloop/cloud.css?url";
 
-// The home route ships no og:image, so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  ssr: false,
+  head: () => ({
+    meta: [
+      { title: "LienLoop · The total-loss desk, connected" },
+      { name: "description", content: "LienLoop: a synthetic, interactive total-loss desk. Explore one member file across six mock systems, with human approvals and a complete event trail." },
+      { property: "og:title", content: "LienLoop · The total-loss desk, connected" },
+      { property: "og:description", content: "A synthetic total-loss desk: six mock systems, deterministic math, a person at every decision." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#152d29" },
+    ],
+    links: [
+      { rel: "stylesheet", href: lienloopCss },
+      { rel: "stylesheet", href: cloudCss },
+    ],
+  }),
+  component: LienLoopApp,
 });
-
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
