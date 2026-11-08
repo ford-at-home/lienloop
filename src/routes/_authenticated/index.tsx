@@ -6,10 +6,10 @@ import cloudCss from "@/lienloop/cloud.css?url";
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({
     meta: [
-      { title: "LienLoop · The total-loss desk, connected" },
-      { name: "description", content: "LienLoop: a synthetic, interactive total-loss desk for invited operators." },
-      { property: "og:title", content: "LienLoop · The total-loss desk, connected" },
-      { property: "og:description", content: "A synthetic total-loss desk: six mock systems, deterministic math, a person at every decision." },
+      { title: "LienLoop · Settle a car loan after a total loss" },
+      { name: "description", content: "A fictional car-loan settlement demo: review insurance payments, cover the unpaid balance and approve removal of the lender’s lien." },
+      { property: "og:title", content: "LienLoop · Settle a car loan after a total loss" },
+      { property: "og:description", content: "Review a fictional case where insurance pays less than the loan balance. Check the documents, payments and approvals before releasing the lien." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
