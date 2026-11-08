@@ -14,13 +14,212 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      lienloop_ai_calls: {
+        Row: {
+          call_index: number
+          created_at: string
+          error: string | null
+          gateway_run_id: string | null
+          id: string
+          input_tokens: number
+          model: string
+          outcome: string
+          output_tokens: number
+          owner_id: string
+          provider: string
+          response_text: string | null
+          run_id: string
+          state_version: number
+          stop_reason: string | null
+          tool_calls: Json
+        }
+        Insert: {
+          call_index: number
+          created_at?: string
+          error?: string | null
+          gateway_run_id?: string | null
+          id?: string
+          input_tokens?: number
+          model: string
+          outcome: string
+          output_tokens?: number
+          owner_id: string
+          provider: string
+          response_text?: string | null
+          run_id: string
+          state_version: number
+          stop_reason?: string | null
+          tool_calls?: Json
+        }
+        Update: {
+          call_index?: number
+          created_at?: string
+          error?: string | null
+          gateway_run_id?: string | null
+          id?: string
+          input_tokens?: number
+          model?: string
+          outcome?: string
+          output_tokens?: number
+          owner_id?: string
+          provider?: string
+          response_text?: string | null
+          run_id?: string
+          state_version?: number
+          stop_reason?: string | null
+          tool_calls?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lienloop_ai_calls_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "lienloop_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lienloop_decisions: {
+        Row: {
+          approval_id: string
+          created_at: string
+          decision: string
+          id: string
+          owner_id: string
+          revision: number
+          run_id: string
+        }
+        Insert: {
+          approval_id: string
+          created_at?: string
+          decision: string
+          id?: string
+          owner_id: string
+          revision: number
+          run_id: string
+        }
+        Update: {
+          approval_id?: string
+          created_at?: string
+          decision?: string
+          id?: string
+          owner_id?: string
+          revision?: number
+          run_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lienloop_decisions_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "lienloop_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lienloop_postings: {
+        Row: {
+          amount_cents: number | null
+          approval_id: string
+          created_at: string
+          id: string
+          kind: string
+          owner_id: string
+          revision: number
+          run_id: string
+        }
+        Insert: {
+          amount_cents?: number | null
+          approval_id: string
+          created_at?: string
+          id?: string
+          kind: string
+          owner_id: string
+          revision: number
+          run_id: string
+        }
+        Update: {
+          amount_cents?: number | null
+          approval_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          owner_id?: string
+          revision?: number
+          run_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lienloop_postings_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "lienloop_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lienloop_runs: {
+        Row: {
+          created_at: string
+          id: string
+          input_tokens: number
+          model_call_limit: number
+          model_calls: number
+          output_tokens: number
+          owner_id: string
+          scenario: string
+          state: Json
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          input_tokens?: number
+          model_call_limit?: number
+          model_calls?: number
+          output_tokens?: number
+          owner_id: string
+          scenario: string
+          state: Json
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          input_tokens?: number
+          model_call_limit?: number
+          model_calls?: number
+          output_tokens?: number
+          owner_id?: string
+          scenario?: string
+          state?: Json
+          updated_at?: string
+          version?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      lienloop_commit: {
+        Args: {
+          p_decision?: Json
+          p_expected: number
+          p_owner: string
+          p_postings?: Json
+          p_run: string
+          p_state: Json
+        }
+        Returns: number
+      }
+      lienloop_reserve_model_call: {
+        Args: { p_daily_limit: number; p_owner: string; p_run: string }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
