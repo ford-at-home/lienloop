@@ -16,9 +16,9 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in · LienLoop" },
-      { name: "description", content: "Sign in to run LienLoop's hosted Lovable Cloud AI mode on a synthetic total-loss file." },
+      { name: "description", content: "Sign in to LienLoop’s fictional car-loan settlement demo, with scripted replay and Cloud AI modes." },
       { property: "og:title", content: "Sign in · LienLoop" },
-      { property: "og:description", content: "Operator sign-in for the hosted LienLoop demo." },
+      { property: "og:description", content: "Account access to a fictional car-loan case where insurance does not cover the full loan balance." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
