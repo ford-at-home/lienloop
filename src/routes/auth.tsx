@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { Button } from '@/components/ui/button';
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -8,6 +9,10 @@ import cloudCss from "@/lienloop/cloud.css?url";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
+  beforeLoad: async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (!error && data.user) throw redirect({ to: '/', replace: true });
+  },
   head: () => ({
     meta: [
       { title: "Sign in · LienLoop" },
@@ -27,7 +32,6 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"in" | "up">("in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [note, setNote] = useState<{ text: string; err?: boolean } | null>(null);
@@ -38,18 +42,11 @@ function AuthPage() {
     setBusy(true);
     setNote(null);
     try {
-      if (mode === "in") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        await navigate({ to: "/" });
-      } else {
-        const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
-        if (error) throw error;
-        if (data.session) await navigate({ to: "/" });
-        else setNote({ text: "Check your email to confirm your account, then sign in." });
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (error) throw error;
+      await navigate({ to: "/", replace: true });
     } catch (err) {
-      setNote({ text: err instanceof Error ? err.message : "Sign-in failed.", err: true });
+      setNote({ text: "Unable to sign in. Check your credentials or try again later.", err: true });
     } finally {
       setBusy(false);
     }
@@ -69,19 +66,17 @@ function AuthPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <Link className="brand" to="/">lienloop<span className="brand-dot">.</span></Link>
-        <h1>{mode === "in" ? "Operator sign-in" : "Create an operator account"}</h1>
-        <p>Hosted Lovable Cloud AI mode stores your synthetic case in Lovable Cloud. The scripted replay works without signing in.</p>
-        <button type="button" className="lovable-auth-button" onClick={lovableSignIn}>Continue with Lovable</button>
+        <div className="brand">lienloop<span className="brand-dot">.</span></div>
+        <h1>Operator sign-in</h1>
+        <p>Sign in with your operator account.</p>
+        <Button variant="outline" type="button" className="lovable-auth-button" disabled={busy} onClick={lovableSignIn}>Continue with Lovable</Button>
         <div className="auth-divider">or with email</div>
         <form onSubmit={submit}>
           <label>Email<input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} /></label>
-          <label>Password<input type="password" required minLength={8} autoComplete={mode === "in" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} /></label>
-          <button className="button primary" disabled={busy} type="submit">{busy ? "Please wait…" : mode === "in" ? "Sign in" : "Create account"}</button>
+          <label>Password<input type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} /></label>
+          <Button className="button primary" disabled={busy} type="submit">{busy ? "Please wait…" : "Sign in"}</Button>
         </form>
         {note && <div className={`auth-note ${note.err ? "err" : ""}`} role="status">{note.text}</div>}
-        <button type="button" className="auth-switch" onClick={() => setMode(mode === "in" ? "up" : "in")}>{mode === "in" ? "Need an account? Create one" : "Have an account? Sign in"}</button>
-        <div><Link className="auth-switch" to="/">Back to the desk</Link></div>
       </div>
     </div>
   );

@@ -31,6 +31,8 @@ use the editor.
 
 ## LienLoop rules
 
+- The desk lives only under the client-only `_authenticated` gate, validating identities with getUser; root owns the sole auth listener and sign-out clears queries before leaving (why: prevents anonymous entry and cached-state restoration).
+
 - `src/lienloop/engine.ts` is the authoritative financial engine imported verbatim from the original repo; do not change its math or transitions — wrap behaviour in `src/lienloop/hosted.ts` instead (why: preserves tested synthetic amounts and sequencing).
 - Hosted writes go only through `src/lienloop/cloud.functions.ts` → service-role-only `lienloop_commit` / `lienloop_reserve_model_call`; browsers get SELECT-only RLS (why: clients must not forge case state, approvals or postings).
 - Model tools are the allowlist in `hosted.ts`; approve/reject/resolve are never model tools (why: a model output must not approve its own action).

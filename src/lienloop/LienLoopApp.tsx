@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate, useRouteContext } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
 import { useServerFn } from '@tanstack/react-start';
 import { Activity, ArrowRight, ArrowUpRight, Bell, Check, CheckCheck, ChevronDown, ChevronRight, CircleHelp, Clock3, Cloud, Download, FileCheck2, FileText, GitBranch, Inbox, Link2, ListChecks, LogOut, Network, Pause, Play, Plus, Radio, RefreshCw, Search, Send, ShieldCheck, Sparkles, Terminal, TriangleAlert, Wallet, X } from 'lucide-react';
 import {advance,approve,caseData,createState,currentBalance,money,nextLabel,reject,resolveBlocker,scenarios,stepDone,steps,vendorLabels,vendors,type AuditEvent,type DemoState,type Scenario,type Vendor} from './engine';
@@ -26,7 +28,9 @@ export function LienLoopApp(){
   const [mode,setMode]=useState<Mode>('replay');
   const [cloud,setCloud]=useState<CloudSnapshot|null>(null);
   const [busy,setBusy]=useState<string|null>(null);
-  const [userEmail,setUserEmail]=useState<string|null|undefined>(undefined);
+  const {user}=useRouteContext({from:'/_authenticated'});
+  const userEmail=user.email;
+  const queryClient=useQueryClient();
   const [pendingScenario,setPendingScenario]=useState<Scenario>('standard');
   const reviewRef=useRef<HTMLDivElement>(null);
   const navigate=useNavigate();
@@ -45,11 +49,14 @@ export function LienLoopApp(){
   useEffect(()=>{if(mode!=='replay'||!running||replay.approval||replay.blocker||replay.phase===8)return;const t=setTimeout(()=>action(()=>setS(advance(replay))),1350);return ()=>clearTimeout(t);},[running,replay,mode]);
   useEffect(()=>{if(replay.phase===8)setRunning(false);},[replay.phase]);
   useEffect(()=>{if(!modal)return;const listener=(e:KeyboardEvent)=>{if(e.key==='Escape')setModal(null);};window.addEventListener('keydown',listener);return()=>window.removeEventListener('keydown',listener);},[modal]);
-  useEffect(()=>{
-    void supabase.auth.getUser().then(({data})=>setUserEmail(data.user?.email??null));
-    const {data:sub}=supabase.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'||event==='SIGNED_OUT'||event==='USER_UPDATED'){setUserEmail(session?.user?.email??null);if(event==='SIGNED_OUT')setCloud(null);}});
-    return()=>sub.subscription.unsubscribe();
-  },[]);
+  async function signOut(){
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    const {error}=await supabase.auth.signOut();
+    if(error){setError('Sign-out failed. Please try again.');return;}
+    setCloud(null);
+    await navigate({to:'/auth',replace:true});
+  }
   // Loading the saved hosted case is a database read only. No model call runs until the operator clicks.
   useEffect(()=>{if(mode!=='cloud'||!userEmail)return;void cloudCall('Loading hosted case…',()=>fetchSnapshot({data:{}}));},[mode,userEmail]);
 
@@ -99,7 +106,7 @@ export function LienLoopApp(){
       <div className="sidebar-bottom">
         <div className="demo-note"><div className="demo-note-icon"><Sparkles size={18}/></div><strong>A better way through<br/>a difficult moment.</strong><p>One connected journey.<br/>A person at every decision.</p><button onClick={()=>setModal('guide')}>Explore the demo <ArrowUpRight size={15}/></button></div>
         <button className="help-link" onClick={()=>setModal('guide')}><CircleHelp size={17}/>Demo guide <ArrowUpRight size={14}/></button>
-        <div className="profile"><div className="avatar">JL</div><div><strong>{userEmail?userEmail.split('@')[0]:'Jordan Lee'}</strong><small>{userEmail?'Signed-in operator':'Demo lending operator'}</small></div>{userEmail?<button className="signout" aria-label="Sign out" onClick={()=>void supabase.auth.signOut()}><LogOut size={14}/></button>:<Badge tone="dark">DEMO</Badge>}</div>
+        <div className="profile"><div className="avatar">JL</div><div><strong>{userEmail?userEmail.split('@')[0]:'Operator'}</strong><small>Signed-in operator</small></div><Button variant="ghost" size="icon" className="signout" aria-label="Sign out" onClick={()=>void signOut()}><LogOut size={14}/></Button></div>
       </div>
     </aside>
     <div className="main-shell">
