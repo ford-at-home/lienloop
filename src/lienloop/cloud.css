@@ -1,0 +1,40 @@
+/* Additions for the hosted Lovable Cloud AI mode, in the original LienLoop palette. */
+.mode-switch{display:inline-flex;border:1px solid #d3dfc5;background:#eef3e6;border-radius:5px;padding:2px;gap:2px}
+.mode-switch button{font-size:10px;padding:7px 9px;border-radius:4px;color:#5e7847;white-space:nowrap}
+.mode-switch button.on{background:#284f3c;color:#f1f5de}
+.mode-switch button:disabled{opacity:.6}
+.mode-strip{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:-8px 0 20px;padding:9px 14px;border:1px dashed #d8e0cf;border-radius:6px;font-size:10.5px;color:#6f7b72;background:#fbfcf8}
+.mode-strip.cloud{border-color:#c9dbb6;background:#f3f8ec}
+.mode-pill{display:inline-flex;align-items:center;gap:4px;font-size:8.5px;letter-spacing:.6px;font-weight:600;padding:3px 6px;border-radius:4px;background:#f1f3ed;color:#87907b}
+.mode-pill.cloud{background:#284f3c;color:#d5e7a0}
+.mode-link{color:#245c49;text-decoration:underline}
+.mode-busy{color:#245c49;font-weight:550}
+.mode-busy::before{content:"";display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:#6b9e7f;animation:ll-pulse 1s ease-in-out infinite}
+@keyframes ll-pulse{50%{opacity:.25}}
+.button:disabled,.text-button:disabled,.reject-button:disabled{opacity:.55;cursor:default}
+.signout{margin-left:auto;color:#a8bc95;padding:4px}
+.cloud-calls{margin-top:22px}
+.cloud-call{border:1px solid #e6e9e2;border-radius:6px;padding:11px 13px;margin-top:8px;background:#fff;font-size:11px}
+.cloud-call.ok{border-color:#cfe0bf}
+.cloud-call.failed{border-color:#e6c8b0;background:#fff8f1}
+.cloud-call-head{display:flex;justify-content:space-between;gap:10px}
+.cloud-call-head time{color:#9aa39c;font-size:10px}
+.cloud-call-meta{color:#7b8580;font-size:10px;margin-top:3px}
+.cloud-call ul{margin:7px 0 0;padding-left:16px;color:#506347}
+.cloud-call code{font-size:10px}
+.cloud-call-text{margin-top:6px;color:#4b5a54;font-style:italic}
+.cloud-call-error{margin-top:6px;color:#a9604b}
+.auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f7f8f5;padding:24px}
+.auth-card{width:100%;max-width:400px;background:#fff;border:1px solid #e6e9e2;border-radius:10px;padding:30px;box-shadow:0 2px 10px #192b1610}
+.auth-card .brand{color:#173b31;padding:0;font-size:26px;margin-bottom:18px}
+.auth-card h1{font-size:21px;margin-bottom:6px}
+.auth-card p{font-size:12px;color:#7b8580;margin-bottom:18px}
+.auth-card form{display:flex;flex-direction:column;gap:10px}
+.auth-card label{font-size:11px;color:#506347;display:flex;flex-direction:column;gap:5px}
+.auth-card input{border:1px solid #dce2d7;border-radius:6px;padding:10px 11px;font-size:13px}
+.auth-card .button{justify-content:center;width:100%}
+.auth-divider{text-align:center;font-size:10px;color:#9aa39c;margin:14px 0}
+.auth-switch{margin-top:14px;font-size:11px;color:#245c49;text-decoration:underline}
+.auth-note{margin-top:12px;font-size:11px;padding:9px 11px;border-radius:6px;background:#f3f8ec;color:#506347}
+.auth-note.err{background:#fff4e9;color:#a97954}
+@media(max-width:700px){.mode-switch{width:100%}.mode-switch button{flex:1}.mode-strip{margin-top:0}}
