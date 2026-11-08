@@ -68,7 +68,7 @@ function AuthPage() {
       <div className="auth-card">
         <div className="brand">lienloop<span className="brand-dot">.</span></div>
         <h1>Operator sign-in</h1>
-        <p>Access is limited to invited operators.</p>
+        <p>Sign in with your operator account.</p>
         <Button variant="outline" type="button" className="lovable-auth-button" disabled={busy} onClick={lovableSignIn}>Continue with Lovable</Button>
         <div className="auth-divider">or with email</div>
         <form onSubmit={submit}>
