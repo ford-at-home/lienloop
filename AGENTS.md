@@ -28,3 +28,11 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## LienLoop rules
+
+- `src/lienloop/engine.ts` is the authoritative financial engine imported verbatim from the original repo; do not change its math or transitions — wrap behaviour in `src/lienloop/hosted.ts` instead (why: preserves tested synthetic amounts and sequencing).
+- Hosted writes go only through `src/lienloop/cloud.functions.ts` → service-role-only `lienloop_commit` / `lienloop_reserve_model_call`; browsers get SELECT-only RLS (why: clients must not forge case state, approvals or postings).
+- Model tools are the allowlist in `hosted.ts`; approve/reject/resolve are never model tools (why: a model output must not approve its own action).
+- tsconfig keeps plain `strict` without noUncheckedIndexedAccess / exactOptionalPropertyTypes / noPropertyAccessFromIndexSignature (why: the imported original source was written for plain strict mode).
+- `local/` is a reference copy of the original stdio MCP/CLI scripts; the runnable original is `public/downloads/lienloop-source.zip` (why: hosted mode replaces the localhost SQLite controller).
