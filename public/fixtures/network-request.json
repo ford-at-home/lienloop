@@ -1,0 +1,17 @@
+{
+  "synthetic": true,
+  "request": {
+    "id": "RQ-701",
+    "channel": "Network feed",
+    "source": "Meridian Network",
+    "vin": "DEMO0000000000421",
+    "loan": "LN-4821",
+    "lossDate": "2026-11-04",
+    "member": "Mira Chen",
+    "amount": 2485000,
+    "document": "network-request.json"
+  },
+  "quotedPerDiemCents": 640,
+  "contractPriceCents": 160000,
+  "notes": "Authoritative fixture figures; no production vendor API."
+}
