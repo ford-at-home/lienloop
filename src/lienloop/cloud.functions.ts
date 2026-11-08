@@ -33,7 +33,7 @@ type Ctx = { supabase: any; userId: string };
 
 export interface CloudSnapshot {
   run: { id: string; scenario: Scenario; version: number; modelCalls: number; modelCallLimit: number; inputTokens: number; outputTokens: number; state: DemoState; createdAt: string } | null;
-  aiCalls: { id: string; provider: string; model: string; call_index: number; state_version: number; tool_calls: unknown; response_text: string | null; stop_reason: string | null; outcome: string; error: string | null; input_tokens: number; output_tokens: number; gateway_run_id: string | null; created_at: string }[];
+  aiCalls: { id: string; provider: string; model: string; call_index: number; state_version: number; tool_calls: { name: string; result: string }[]; response_text: string | null; stop_reason: string | null; outcome: string; error: string | null; input_tokens: number; output_tokens: number; gateway_run_id: string | null; created_at: string }[];
   postings: { kind: string; amount_cents: number | null; approval_id: string; revision: number; created_at: string }[];
   provider: string;
   model: string;
